@@ -1,0 +1,52 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: "clickhouse-demo"
+  namespace: "clickhouse"
+spec:
+  configuration:
+    settings:
+      mysql_port: 3306
+      http_port: 8124
+      tcp_port: 9000
+      interserver_http_port: 9010
+    zookeeper:
+      nodes:
+      - host: zookeeper.zoo1ns
+        port: 2181
+    clusters:
+      - name: "ck-demo"
+        layout:
+          shardsCount: 2
+          replicasCount: 1
+        templates:
+          # serviceTemplate: svc-template
+          podTemplate: clickhouse-stable
+          volumeClaimTemplate: storage-vc-template
+  templates:
+    # serviceTemplates:
+    #   - name: svc-template
+    #     generateName: chendpoint-{chi}
+    #     spec:
+    #       ports:
+    #         - name: http
+    #           port: 8123
+    #         - name: tcp
+    #           port: 9000
+    #       type: NodePort
+    podTemplates:
+      - name: clickhouse-stable
+        spec:
+          containers:
+          - name: clickhouse
+            image: altinity/clickhouse-server:21.3.20.2.altinitystable
+    volumeClaimTemplates:
+      - name: storage-vc-template
+        spec:
+          storageClassName: local
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+
