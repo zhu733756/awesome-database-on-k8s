@@ -14,7 +14,7 @@ data:
                 "name": "ks-prometheus",
                 "orgId": 1,
                 "type": "prometheus",
-                "url": "http://prometheus-k8s.kubesphere-monitoring-system.svc:8080",
+                "url": "http://prometheus-k8s.kubesphere-monitoring-system.svc:9090",
                 "version": 1
             }
         ]

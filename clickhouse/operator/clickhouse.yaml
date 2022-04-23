@@ -4,12 +4,20 @@ metadata:
   name: "clickhouse-demo"
   namespace: "clickhouse"
 spec:
+  defaults:
+    templates:
+      serviceTemplate: chi-service-template
   configuration:
-    settings:
-      mysql_port: 3306
-      http_port: 8124
-      tcp_port: 9000
-      interserver_http_port: 9010
+    users:
+      default/networks/ip: 
+        - "::/0"
+        - "0.0.0.0"
+        - "127.0.0.1"
+    # settings:
+    #   mysql_port: 3306
+      # http_port: 8123
+      # tcp_port: 9000
+      # interserver_http_port: 9009
     zookeeper:
       nodes:
       - host: zookeeper.zoo1ns
@@ -17,23 +25,23 @@ spec:
     clusters:
       - name: "ck-demo"
         layout:
-          shardsCount: 2
-          replicasCount: 1
+          shardsCount: 1
+          replicasCount: 2
         templates:
-          # serviceTemplate: svc-template
+          # serviceTemplate: chi-service-template
           podTemplate: clickhouse-stable
           volumeClaimTemplate: storage-vc-template
   templates:
-    # serviceTemplates:
-    #   - name: svc-template
-    #     generateName: chendpoint-{chi}
-    #     spec:
-    #       ports:
-    #         - name: http
-    #           port: 8123
-    #         - name: tcp
-    #           port: 9000
-    #       type: NodePort
+    serviceTemplates:
+      - name: chi-service-template
+        generateName: ch-endpoint-{chi}
+        spec:
+          ports:
+            - name: http
+              port: 8123
+            - name: tcp
+              port: 9000
+          type: NodePort
     podTemplates:
       - name: clickhouse-stable
         spec:
