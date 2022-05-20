@@ -9,9 +9,10 @@ spec:
       serviceTemplate: chi-service-template
   configuration:
     users:
+      default/access_management: "1"
       default/networks/ip: 
         - "::/0"
-        - "0.0.0.0"
+        - "0.0.0.0/0"
         - "127.0.0.1"
     # settings:
     #   mysql_port: 3306
@@ -51,7 +52,7 @@ spec:
     volumeClaimTemplates:
       - name: storage-vc-template
         spec:
-          storageClassName: local
+          storageClassName: openebs-hostpath
           accessModes:
             - ReadWriteOnce
           resources:
